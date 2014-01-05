@@ -19,26 +19,15 @@ Open the library using <a href="http://www.eclipse.org/downloads/">Eclipse</a>.
 Set the authentication parameters in the **authentication.xml** file.
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-    <dict>
-        <key>authenticatingServerBaseUrl</key>
-        <string>https://authn.sd00.worldcat.org/oauth2</string>
-        <key>wskey</key>
-        <string></string>
-        <key>authenticatingInstitutionId</key>
-        <string></string>
-        <key>contextInstitutionId</key>
-        <string></string>
-        <key>redirectUrl</key>
-        <string></string>
-        <key>scopes</key>
-        <string></string>
-        <key>responseType</key>
-        <string>token</string>
-    </dict>
-</plist>
+<resources>
+    <string name="authenticatingServerBaseUrl">https://authn.sd00.worldcat.org/oauth2</string>
+    <string name="wskey"></string>
+    <string name="authenticatingInstitutionId"></string>
+    <string name="contextInstitutionId"></string>
+    <string name="redirectUrl"></string>
+    <string name="scopes"></string>
+    <string name="responseType">token</string>
+</resources>
 ```
 
 * **wskey** - the public key that identifies the client
