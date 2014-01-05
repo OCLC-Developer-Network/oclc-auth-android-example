@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">OCLC Authentication</string>
+    <string name="action_settings">Settings</string>
+    <string name="time_remaining_expired">Access Token Time Remaining: expired</string>
+    <string name="time_remaining">Access Token Time Remaining:&#160;</string>
+    <string name="invalid_authentication_request">Error - Invalid Authentication Request</string>
+    <string name="clear_cookies">Clear Cookies</string>
+    <string name="sign_in">Sign In Again</string>
+    <string name="authenticating">Authenticating&#8230;</string>
+    <string name="please_wait">Please Wait</string>
+
+</resources>

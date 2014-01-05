@@ -1,0 +1,9 @@
+<resources>
+    <string name="authenticatingServerBaseUrl">https://authn.sd00.worldcat.org/oauth2</string>
+    <string name="wskey"></string>
+    <string name="authenticatingInstitutionId"></string>
+    <string name="contextInstitutionId"></string>
+    <string name="redirectUrl"></string>
+    <string name="scopes"></string>
+    <string name="responseType">token</string>
+</resources>
