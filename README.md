@@ -110,4 +110,4 @@ client_id={a valid wskey}
 }
 </pre>
 </li>
-<li>The refresh token can then be used to request an access token, as described in the <a href="http://www.oclc.org/developer/news/authentication-and-authorization-refresh-tokens">developer network documentation</a>.</li>
+<li>The refresh token can then be used to request an access token, as described in the <a href="http://www.oclc.org/developer/news/authentication-and-authorization-refresh-tokens">OCLC Developer Network documentation</a>.</li>
