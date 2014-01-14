@@ -1,7 +1,7 @@
 package org.oclc.mobile.authentication.android;
 
 /*******************************************************************************
- * Copyright (c) 2013 OCLC Inc.
+ * Copyright (c) 2014 OCLC Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,15 +16,13 @@ package org.oclc.mobile.authentication.android;
 import java.util.HashMap;
 
 /**
- * This interface defines the callback functions that AuthenticatingWebView.java
- * will execute in MainActivity.java, since the MainActivity handles displaying
- * results on the screen, and AuthenticatingWebView makes asynchronous http
+ * This interface defines the callback functions that AuthenticatingWebView.java will execute in MainActivity.java,
+ * since the MainActivity handles displaying results on the screen, and AuthenticatingWebView makes asynchronous http
  * requests.
  */
 public interface AuthenticatingWebViewCallbackMethods {
     /**
-     * Method is called when it is time to display the progress spinner, for
-     * example when loading on the web view.
+     * Method is called when it is time to display the progress spinner, for example when loading on the web view.
      */
     void startProgressDialog();
 

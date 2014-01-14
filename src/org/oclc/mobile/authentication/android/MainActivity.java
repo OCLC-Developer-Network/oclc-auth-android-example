@@ -1,7 +1,7 @@
 package org.oclc.mobile.authentication.android;
 
 /*******************************************************************************
- * Copyright (c) 2013 OCLC Inc.
+ * Copyright (c) 2014 OCLC Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,20 +28,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Displays the view for the application and handles UI interaction. The
- * following resources are loaded into this Activity:
+ * Displays the view for the application and handles UI interaction. The following resources are loaded into this
+ * Activity:
  * <ul>
  * <li>res/layout/activity_main.xml - the view objects and their layout</li>
  * <li>/res/values/strings.xml - any strings that are displayed</li>
- * <li>/res/values/authentication.xml - list of strings containing
- * authentication parameters</li>
+ * <li>/res/values/authentication.xml - list of strings containing authentication parameters</li>
  * </ul>
  * <p>
- * This class calls an instance of AuthenticatingWebView to handle the actual
- * sign in process with the OCLC Authentication servers. Call back methods are
- * defined by interfaces in AuthenticatingWebViewCallbackMethods, so that the
- * AuthenticatingWebView can turn an activity indicator on and off, and return
- * the authentication results for display.
+ * This class calls an instance of AuthenticatingWebView to handle the actual sign in process with the OCLC
+ * Authentication servers. Call back methods are defined by interfaces in AuthenticatingWebViewCallbackMethods, so that
+ * the AuthenticatingWebView can turn an activity indicator on and off, and return the authentication results for
+ * display.
  * <p>
  * The request and result parameters are as follows:
  * <p>
@@ -66,13 +64,12 @@ import android.widget.TextView;
  * <li>expires_at</li>
  * </ul>
  * <p>
- * The Cookie Manager, myCookieManager, gives access to this app's cookies so
- * that we can clear them when restarting the sign-in activity from scratch.
+ * The Cookie Manager, myCookieManager, gives access to this app's cookies so that we can clear them when restarting the
+ * sign-in activity from scratch.
  *
  * @see android.app.Activity
  */
-public class MainActivity extends Activity implements
-AuthenticatingWebViewCallbackMethods {
+public class MainActivity extends Activity implements AuthenticatingWebViewCallbackMethods {
 
     /**
      * Multiplier to convert seconds to milliseconds
@@ -80,14 +77,13 @@ AuthenticatingWebViewCallbackMethods {
     private static final int SECONDS_TO_MILLISECONDS = 1000;
 
     /**
-     * An extension that is passed a webview and uses it to handle
-     * authentication
+     * An extension that is passed a webview and uses it to handle authentication
      */
     private AuthenticatingWebView authenticatingWebView;
 
     /**
-     * Holds the context of MainActivity so it can be passed to the WebView. The
-     * WebView uses that context to call back to the MainActivity to
+     * Holds the context of MainActivity so it can be passed to the WebView. The WebView uses that context to call back
+     * to the MainActivity to
      * <ul>
      * <li>Start the activity spinner.</li>
      * <li>Stop the activity spinner.</li>
@@ -102,14 +98,13 @@ AuthenticatingWebViewCallbackMethods {
     private CookieManager myCookieManager;
 
     /**
-     * Timer activated when authentication token is received to decrement the
-     * seconds remaining until the authentication token expires.
+     * Timer activated when authentication token is received to decrement the seconds remaining until the authentication
+     * token expires.
      */
     private CountDownTimer tokenCountDownTimer;
 
     /**
-     * A progress dialog to indicate to the user that the app is waiting for an
-     * http response
+     * A progress dialog to indicate to the user that the app is waiting for an http response
      */
     private ProgressDialog myProgressDialog;
 
@@ -124,17 +119,14 @@ AuthenticatingWebViewCallbackMethods {
     private String requestUrl;
 
     /**
-     * This method initializes the class and only fires once - when the app
-     * loads into memory. Once an app is initialized, it stays in the run state
-     * until the client runs out of memory or shuts off, which could be for
-     * days. This method does not fire when the app returns from the background
-     * to the foreground.
+     * This method initializes the class and only fires once - when the app loads into memory. Once an app is
+     * initialized, it stays in the run state until the client runs out of memory or shuts off, which could be for days.
+     * This method does not fire when the app returns from the background to the foreground.
      * <p>
-     * The method loads the layout from the xml file, instantiates an instance
-     * of the webview. A WebView is an embedded Chrome browser with no user
-     * controls, which we will use to handle OAuth2 authentication. Initially
-     * the webView is invisible. It is made visible to facilitate sign in, and
-     * hidden after a token is received so that the token can be displayed.
+     * The method loads the layout from the xml file, instantiates an instance of the webview. A WebView is an embedded
+     * Chrome browser with no user controls, which we will use to handle OAuth2 authentication. Initially the webView is
+     * invisible. It is made visible to facilitate sign in, and hidden after a token is received so that the token can
+     * be displayed.
      *
      * @param savedInstanceState state information for the app
      * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -142,67 +134,61 @@ AuthenticatingWebViewCallbackMethods {
     @Override
     protected final void onCreate(final Bundle savedInstanceState) {
 
-        /**
+        /*
          * Set the context required for the progress dialog
          */
         myContext = this;
 
-        /**
-         * Required for all Android apps to pass the savedInstanceState to the
-         * parent
+        /*
+         * Required for all Android apps to pass the savedInstanceState to the parent
          */
         super.onCreate(savedInstanceState);
 
-        /**
-         * Loads the view elements from the xml file. R.layout.activity_main
-         * refers to res/layout/activity_main.xml
+        /*
+         * Loads the view elements from the xml file. R.layout.activity_main refers to res/layout/activity_main.xml
          */
         setContentView(R.layout.activity_main);
 
-        /**
-         * Get a handle to the webView whose position and size is defined in
-         * activity_main.xml
+        /*
+         * Get a handle to the webView whose position and size is defined in activity_main.xml
          */
         webView = (WebView) findViewById(R.id.webView);
 
-        /**
-         * Get a handle to the CookieManager, which is global for this app, and
-         * use it to enable cookies.
+        /*
+         * Get a handle to the CookieManager, which is global for this app, and use it to enable cookies.
          */
         myCookieManager = CookieManager.getInstance();
         myCookieManager.setAcceptCookie(true);
 
-        /**
-         * Build the request url by getting the request parameters from
-         * res/values/authentication.xml.
+        /*
+         * Build the request url by getting the request parameters from res/values/authentication.xml.
          */
-        requestUrl = new StringBuffer()
-        .append(getString(R.string.authenticatingServerBaseUrl))
-        .append("/authorizeCode?client_id=")
-        .append(getString(R.string.wskey))
-        .append("&authenticatingInstitutionId=")
-        .append(getString(R.string.authenticatingInstitutionId))
-        .append("&contextInstitutionId=")
-        .append(getString(R.string.contextInstitutionId))
-        .append("&redirect_uri=")
-        .append(getString(R.string.redirectUrl))
-        .append("&response_type=")
-        .append(getString(R.string.responseType)).append("&scope=")
-        .append(getString(R.string.scopes)).toString();
+        requestUrl = (new StringBuffer()).append(getString(R.string.authenticatingServerBaseUrl))
+            .append("/authorizeCode?client_id=")
+            .append(getString(R.string.wskey))
+            .append("&authenticatingInstitutionId=")
+            .append(getString(R.string.authenticatingInstitutionId))
+            .append("&contextInstitutionId=")
+            .append(getString(R.string.contextInstitutionId))
+            .append("&redirect_uri=")
+            .append(getString(R.string.redirectUrl))
+            .append("&response_type=")
+            .append(getString(R.string.responseType))
+            .append("&scope=")
+            .append(getString(R.string.scopes))
+            .toString();
 
         if (getString(R.string.wskey).equals("")) {
-            // If the wskey is blank, then the user probably forgot to set the
-            // parameters in authentication.xml
+            /*
+             * If the wskey is blank, then the user probably forgot to set the parameters in authentication.xml
+             */
             LinearLayout resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
             resultLayout.setVisibility(View.VISIBLE);
-
-            ((TextView) findViewById(R.id.access_token))
-            .setText("You must set the authentication parameters in the authentication.xml properties file.");
+            ((TextView) findViewById(R.id.access_token)).setText(getString(R.string.authParamsNotSet));
         } else {
-            /**
-             * Create the AuthenticatingWebView, a custom WebView, to make the url
-             * request. We also pass this class's context so that the
-             * AuthenticatingWebView can execute callbacks.
+            /*
+             * Create the AuthenticatingWebView, a custom WebView, to make the url request. We also pass this class's
+             * context so that the AuthenticatingWebView can execute callbacks.
              */
             authenticatingWebView = new AuthenticatingWebView(webView, this);
             authenticatingWebView.makeRequest(requestUrl);
@@ -210,8 +196,7 @@ AuthenticatingWebViewCallbackMethods {
     }
 
     /**
-     * Boilerplate code required by Android to display any menu xml that may
-     * exist in res/menu.
+     * Boilerplate code required by Android to display any menu xml that may exist in res/menu.
      *
      * @param menu the menu associated with this activity
      * @return returns true to create the menu
@@ -224,63 +209,66 @@ AuthenticatingWebViewCallbackMethods {
     }
 
     /**
-     * Standard form callback for the [Clear Cookies] button, whose properties
-     * are described in res/layout/activity_main.xml.
+     * Standard form callback for the [Clear Cookies] button, whose properties are described in
+     * res/layout/activity_main.xml.
      *
      * @param view [Clear Cookies] button's view
      */
     public final void clearCookies(final View view) {
 
-        /**
-         * Removes the cookies associated with this app only - browser cookies
-         * and other app's cookies are not affected.
+        /*
+         * Removes the cookies associated with this app only - browser cookies and other app's cookies are not affected.
          */
         myCookieManager.removeAllCookie();
     }
 
     /**
-     * Standard form callback for the [Sign In Again] button, whose properties
-     * are described in res/layout/activity_main.xml.
+     * Standard form callback for the [Sign In Again] button, whose properties are described in
+     * res/layout/activity_main.xml.
      *
      * @param view [Sign In Again] button's view
      */
     public final void signInAgain(final View view) {
 
-        if (!getString(R.string.wskey).equals("")) {
-            /**
-             * Clear the token count down timer if it is running and set the timer
-             * text to expired.
+        if (getString(R.string.wskey).equals("")) {
+            /*
+             * If the wskey is blank, then the user probably forgot to set the parameters in authentication.xml
+             */
+            LinearLayout resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
+            resultLayout.setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.access_token)).setText(getString(R.string.authParamsNotSet));
+        } else {
+            /*
+             * Clear the token count down timer if it is running and set the timer text to expired.
              */
             if (tokenCountDownTimer != null) {
                 tokenCountDownTimer.cancel();
                 tokenCountDownTimer = null;
-                ((TextView) findViewById(R.id.timeRemainingTextView))
-                .setText(getString(R.string.time_remaining_expired));
+                ((TextView) findViewById(R.id.timeRemainingTextView)).setText(getString(R.string.time_remaining_expired));
             }
 
-            /**
-             *  Hide the text result views.
+            /*
+             * Hide the text result views.
              */
             LinearLayout resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
             resultLayout.setVisibility(View.INVISIBLE);
 
-            /**
+            /*
              * Make another request.
              */
-
             authenticatingWebView.makeRequest(requestUrl);
         }
     }
 
     /**
-     * Display a progress indicator while authenticating. Implements a callback
-     * function called by AuthenticatingWebViewCallbackMethods
+     * Display a progress indicator while authenticating. Implements a callback function called by
+     * AuthenticatingWebViewCallbackMethods
      */
     @Override
     public final void startProgressDialog() {
 
-        /**
-         *  Create a progressDialog if it does not exist.
+        /*
+         * Create a progressDialog if it does not exist.
          */
         if (myProgressDialog == null) {
             myProgressDialog = new ProgressDialog(myContext);
@@ -290,15 +278,15 @@ AuthenticatingWebViewCallbackMethods {
             myProgressDialog.setIndeterminate(true);
         }
 
-        /**
-         *  Show the progress dialog.
+        /*
+         * Show the progress dialog.
          */
         myProgressDialog.show();
     }
 
     /**
-     * Stop and destroy a progress indicator (if it exists). Implements a
-     * callback function called by AuthenticatingWebViewCallbackMethods.
+     * Stop and destroy a progress indicator (if it exists). Implements a callback function called by
+     * AuthenticatingWebViewCallbackMethods.
      */
     @Override
     public final void stopProgressDialog() {
@@ -306,82 +294,64 @@ AuthenticatingWebViewCallbackMethods {
     }
 
     /**
-     * Display the results by extracting the values from the Hash Map and
-     * inserting them into the TextViews which are defined in
-     * res/layout/activity_main.xml. Implements a callback function called by
+     * Display the results by extracting the values from the Hash Map and inserting them into the TextViews which are
+     * defined in res/layout/activity_main.xml. Implements a callback function called by
      * AuthenticatingWebViewCallbackMethods.
      *
      * @param authorizationReturnParameters A list of return params and values
      */
     @Override
-    public final void displayResults(
-            final HashMap<String, String> authorizationReturnParameters) {
+    public final void displayResults(final HashMap<String, String> authorizationReturnParameters) {
 
-        /**
-         * Make the text result views visible. Each result parameter's textview
-         * is grouped into a LinearLayout.
+        /*
+         * Make the text result views visible. Each result parameter's textview is grouped into a LinearLayout.
          */
         LinearLayout resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
         resultLayout.setVisibility(View.VISIBLE);
 
-        ((TextView) findViewById(R.id.access_token))
-        .setText(authorizationReturnParameters.get("access_token"));
-        ((TextView) findViewById(R.id.principalID))
-        .setText(authorizationReturnParameters.get("principalID"));
-        ((TextView) findViewById(R.id.principalIDNS))
-        .setText(authorizationReturnParameters.get("principalIDNS"));
-        ((TextView) findViewById(R.id.context_institution_id))
-        .setText(authorizationReturnParameters
-                .get("context_institution_id"));
-        ((TextView) findViewById(R.id.token_type))
-        .setText(authorizationReturnParameters.get("token_type"));
-        ((TextView) findViewById(R.id.expires_in))
-        .setText(authorizationReturnParameters.get("expires_in"));
-        ((TextView) findViewById(R.id.expires_at))
-        .setText(authorizationReturnParameters.get("expires_at"));
+        ((TextView) findViewById(R.id.access_token)).setText(authorizationReturnParameters.get("access_token"));
+        ((TextView) findViewById(R.id.principalID)).setText(authorizationReturnParameters.get("principalID"));
+        ((TextView) findViewById(R.id.principalIDNS)).setText(authorizationReturnParameters.get("principalIDNS"));
+        ((TextView) findViewById(R.id.context_institution_id)).setText(authorizationReturnParameters.get("context_institution_id"));
+        ((TextView) findViewById(R.id.token_type)).setText(authorizationReturnParameters.get("token_type"));
+        ((TextView) findViewById(R.id.expires_in)).setText(authorizationReturnParameters.get("expires_in"));
+        ((TextView) findViewById(R.id.expires_at)).setText(authorizationReturnParameters.get("expires_at"));
 
-        /**
-         *  Check if the token CountDownTimer, and cancel it if it does.
+        /*
+         * Check if the token CountDownTimer, and cancel it if it does.
          */
         if (tokenCountDownTimer != null) {
             tokenCountDownTimer.cancel();
         }
 
-        /**
-         * Start a new token count down timer based on the time remaining
-         * returned with the token (time remaining is in seconds).
+        /*
+         * Start a new token count down timer based on the time remaining returned with the token (time remaining is in
+         * seconds).
          */
         if (authorizationReturnParameters.get("expires_in") != null) {
-            tokenCountDownTimer = new CountDownTimer(
-                    Integer.parseInt(authorizationReturnParameters
-                            .get("expires_in")) * SECONDS_TO_MILLISECONDS,
-                            SECONDS_TO_MILLISECONDS) {
+            tokenCountDownTimer = new CountDownTimer(Integer.parseInt(authorizationReturnParameters.get("expires_in")) * SECONDS_TO_MILLISECONDS,
+                SECONDS_TO_MILLISECONDS) {
 
                 /* Callback fires every 1000 ms. */
                 @Override
                 public void onTick(final long millisUntilFinished) {
-                    ((TextView) findViewById(R.id.timeRemainingTextView))
-                    .setText(getString(R.string.time_remaining)
-                            + millisUntilFinished
-                            / SECONDS_TO_MILLISECONDS);
+                    ((TextView) findViewById(R.id.timeRemainingTextView)).setText(getString(R.string.time_remaining) + millisUntilFinished
+                        / SECONDS_TO_MILLISECONDS);
                 }
 
-                /**
-                 *  Callback fires when timer counts down to zero.
+                /*
+                 * Callback fires when timer counts down to zero.
                  */
                 @Override
                 public void onFinish() {
-                    ((TextView) findViewById(R.id.timeRemainingTextView))
-                    .setText(getString(R.string.time_remaining_expired));
+                    ((TextView) findViewById(R.id.timeRemainingTextView)).setText(getString(R.string.time_remaining_expired));
                 }
             }.start();
         } else {
-            /**
-             * If the "expires_in" parameter is null, then something has gone
-             * wrong during authentication.
+            /*
+             * If the "expires_in" parameter is null, then something has gone wrong during authentication.
              */
-            ((TextView) findViewById(R.id.timeRemainingTextView))
-            .setText(getString(R.string.invalid_authentication_request));
+            ((TextView) findViewById(R.id.timeRemainingTextView)).setText(getString(R.string.invalid_authentication_request));
         }
     }
 }

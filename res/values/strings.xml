@@ -9,5 +9,6 @@
     <string name="sign_in">Sign In Again</string>
     <string name="authenticating">Authenticating&#8230;</string>
     <string name="please_wait">Please Wait</string>
+    <string name="authParamsNotSet">Please set the authentication parameters in the authentication.xml file.</string>
 
 </resources>
