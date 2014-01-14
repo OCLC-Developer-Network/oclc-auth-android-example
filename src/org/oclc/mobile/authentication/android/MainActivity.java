@@ -246,27 +246,30 @@ AuthenticatingWebViewCallbackMethods {
      */
     public final void signInAgain(final View view) {
 
-        /**
-         * Clear the token count down timer if it is running and set the timer
-         * text to expired.
-         */
-        if (tokenCountDownTimer != null) {
-            tokenCountDownTimer.cancel();
-            tokenCountDownTimer = null;
-            ((TextView) findViewById(R.id.timeRemainingTextView))
-            .setText(getString(R.string.time_remaining_expired));
+        if (!getString(R.string.wskey).equals("")) {
+            /**
+             * Clear the token count down timer if it is running and set the timer
+             * text to expired.
+             */
+            if (tokenCountDownTimer != null) {
+                tokenCountDownTimer.cancel();
+                tokenCountDownTimer = null;
+                ((TextView) findViewById(R.id.timeRemainingTextView))
+                .setText(getString(R.string.time_remaining_expired));
+            }
+
+            /**
+             *  Hide the text result views.
+             */
+            LinearLayout resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
+            resultLayout.setVisibility(View.INVISIBLE);
+
+            /**
+             * Make another request.
+             */
+
+            authenticatingWebView.makeRequest(requestUrl);
         }
-
-        /**
-         *  Hide the text result views.
-         */
-        LinearLayout resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
-        resultLayout.setVisibility(View.INVISIBLE);
-
-        /**
-         * Make another request.
-         */
-        authenticatingWebView.makeRequest(requestUrl);
     }
 
     /**
