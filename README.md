@@ -1,4 +1,4 @@
-# OCLC Android Authentication Example
+# OCLC Mobile Authentication Android App Example
 
 This sample Android Application demonstrates how to authenticate an OCLC user to obtain an access token. 
 
