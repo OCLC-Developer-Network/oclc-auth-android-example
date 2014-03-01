@@ -2,7 +2,7 @@
 
 This sample Android Application demonstrates how to authenticate an OCLC user to obtain an access token. 
 
-A use case would be to allow a library patron to view their checked out items, place holds or renew materials on an iPhone or iPad.
+A use case would be to allow a library patron to view their checked out items, place holds or renew materials on an Android phone or tablet.
 
 A tutorial explaining this application's code in detail <a href="http://oclc.org/developer/news/tutorial-mobile-authentication-android">is available here</a>.
 
